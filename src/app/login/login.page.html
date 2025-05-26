@@ -1,0 +1,60 @@
+<ion-header [translucent]="true">
+
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-card color="light">
+    <ion-card-header>
+      <ion-card-title><h1>Iniciar Sesión</h1></ion-card-title>
+    </ion-card-header>
+  
+    <ion-card-content>
+      <h2>Ingresa tus credenciales:</h2>
+    </ion-card-content>
+    <ion-list>
+      <ion-item>
+        <ion-icon slot="start" name="mail-outline"></ion-icon>
+
+        <ion-input labelPlacement="floating" type="email" placeholder="correo@ejemplo.com" required>
+          <div slot="label">Correo electrónico <ion-text color="danger">*</ion-text></div>
+        </ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-input labelPlacement="floating" type="password" placeholder="Contraseña" required>
+          <div slot="label">Contraseña <ion-text color="danger">*</ion-text></div>
+        </ion-input>
+      </ion-item>
+      <div class="ion-text-center">
+        <ion-button (click)="mostrarToasts()" class="login-button">Iniciar Sesión</ion-button>
+        
+      </div>
+
+      <ion-text color="medium">
+        <p class="ion-text-center">
+          <a href="/register">¿Olvidaste la contraseña?</a>
+        </p>
+      </ion-text>
+
+      <ion-text color="medium">
+        <p class="ion-text-center">
+          ¿No tienes cuenta?
+          <a href="/register">Regístrate aquí</a>
+        </p>
+      </ion-text>
+
+    </ion-list>
+
+  </ion-card>
+
+
+  <ion-footer>
+    <ion-toolbar color="light">
+      <ion-title class="ion-text-center" size="small">
+        © 2025 SkeletonAPP - Creado por Daniel Alarcón
+      </ion-title>
+    </ion-toolbar>
+  </ion-footer>
+
+
+</ion-content>
