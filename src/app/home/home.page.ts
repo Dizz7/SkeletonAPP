@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -11,6 +12,13 @@ export class HomePage {
 
   user: string = '';
 
-  constructor() {}
+  constructor(private router: Router) {
+    const navigation = this.router.getCurrentNavigation();
+    const state = navigation?.extras.state as { user: string };
+
+    if (state?.user) {
+      this.user = state.user;
+    }
+  }
 
 }
