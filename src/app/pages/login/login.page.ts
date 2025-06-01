@@ -53,8 +53,8 @@ export class LoginPage {
       return;
     }
 
-    if (this.email.length < 3) {
-      this.mostrarError('El email debe tener al menos 3 caracteres.');
+    if (this.email.length < 3 || this.email.length > 8) {
+      this.mostrarError('El email debe tener entre 3 y 8 caracteres.');
       return;
     }
 
