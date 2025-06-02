@@ -1,11 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
-import { AnimationController } from '@ionic/angular';
-import { ViewChild, ElementRef } from '@angular/core';
-
-
-
+import { AlertController, AnimationController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -14,11 +9,12 @@ import { ViewChild, ElementRef } from '@angular/core';
   standalone: false,
 })
 export class HomePage {
-
   user: string = '';
   nombre: string = '';
   apellido: string = '';
   educacion: string = '';
+  nacimiento: Date | null = null;
+
   nivelesEducacion: string[] = [
     'Básica',
     'Media',
@@ -26,13 +22,14 @@ export class HomePage {
     'Postgrado',
     'Doctorado'
   ];
-  nacimiento: Date | null = null;
-  nombreAnimado: boolean = false;
-  apellidoAnimado: boolean = false;
 
-  constructor(private router: Router,
+  @ViewChild('nombreField', { static: false }) nombreField!: ElementRef;
+  @ViewChild('apellidoField', { static: false }) apellidoField!: ElementRef;
+
+  constructor(
+    private router: Router,
     private alertController: AlertController,
-    private animationCtrl: AnimationController
+    private animationCtrl: AnimationController,
   ) {
     const navigation = this.router.getCurrentNavigation();
     const state = navigation?.extras.state as { user: string };
@@ -42,50 +39,33 @@ export class HomePage {
     }
   }
 
-
-  @ViewChild('inputNombre', { static: false }) inputNombre!: ElementRef;
-  @ViewChild('inputApellido', { static: false }) inputApellido!: ElementRef;
-  @ViewChild('cardAnimado', { static: false }) cardAnimado!: ElementRef;
-
-
-
-
- // Método limpiar animado
-  async limpiar() {
+  // Método LIMPIAR con animación
+  limpiar() {
     this.nombre = '';
     this.apellido = '';
     this.educacion = '';
     this.nacimiento = null;
   
-    // Animación de izquierda a derecha para nombre
-    const animNombre = this.animationCtrl
-      .create()
-      .addElement(this.inputNombre.nativeElement)
-      .duration(1000)
-      .iterations(1)
-      .keyframes([
-        { offset: 0, transform: 'translateX(0)' },
-        { offset: 0.5, transform: 'translateX(20px)' },
-        { offset: 1, transform: 'translateX(0)' }
-      ]);
-  
-    // Animación de izquierda a derecha para apellido
-    const animApellido = this.animationCtrl
-      .create()
-      .addElement(this.inputApellido.nativeElement)
-      .duration(1000)
-      .iterations(1)
-      .keyframes([
-        { offset: 0, transform: 'translateX(0)' },
-        { offset: 0.5, transform: 'translateX(20px)' },
-        { offset: 1, transform: 'translateX(0)' }
-      ]);
-  
-    animNombre.play();
-    animApellido.play();
+    this.animarCampo(this.nombreField);
+    this.animarCampo(this.apellidoField);
   }
-
-
+  
+  animarCampo(elementRef: ElementRef) {
+    const anim = this.animationCtrl
+      .create()
+      .addElement(elementRef.nativeElement)
+      .duration(1000)
+      .iterations(1)
+      .keyframes([
+        { offset: 0, transform: 'translateX(0)' },
+        { offset: 0.25, transform: 'translateX(15px)' },
+        { offset: 0.5, transform: 'translateX(-15px)' },
+        { offset: 0.75, transform: 'translateX(10px)' },
+        { offset: 1, transform: 'translateX(0)' }
+      ]);
+  
+    anim.play();
+  }
 
   // Mostrar información con alert
   async mostrarInfo(mensaje: string) {
@@ -97,29 +77,23 @@ export class HomePage {
     await alert.present();
   }
 
+  // Método MOSTRAR
+  async mostrar() {
+    if (!this.nombre && !this.apellido) {
+      await this.mostrarInfo('Ingrese su nombre y apellido.');
+      return;
+    }
 
+    if (!this.nombre) {
+      await this.mostrarInfo('Ingrese su nombre.');
+      return;
+    }
 
+    if (!this.apellido) {
+      await this.mostrarInfo('Ingrese su apellido.');
+      return;
+    }
 
-// Método mostrar
-async mostrar() {
-  if (!this.nombre && !this.apellido) {
-    await this.mostrarInfo('Ingrese su nombre y apellido.');
-    return;
+    await this.mostrarInfo(`Su nombre es ${this.nombre} ${this.apellido}.`);
   }
-
-  if (!this.nombre) {
-    await this.mostrarInfo('Ingrese su nombre.');
-    return;
-  }
-
-  if (!this.apellido) {
-    await this.mostrarInfo('Ingrese su apellido.');
-    return;
-  }
-
-  // Si ambos están presentes
-  await this.mostrarInfo(`Su nombre es ${this.nombre} ${this.apellido}.`);
 }
-}
-    
-
