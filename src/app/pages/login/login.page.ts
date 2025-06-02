@@ -10,7 +10,7 @@ import { ToastController, AlertController } from '@ionic/angular';
 })
 export class LoginPage {
 
-  email: string = '';
+  user: string = '';
   password: string = '';
   mensaje: string = '';
 
@@ -40,26 +40,27 @@ export class LoginPage {
     await alert.present();
   }
 
-  // Validar formato del email
-  validarEmail(email: string): boolean {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  }
+
+// Validar formato del usuario (sólo letras y números, entre 3 y 8 caracteres)
+validarUsuario(user: string): boolean {
+  const usuarioRegex = /^[a-zA-Z0-9]{3,8}$/;
+  return usuarioRegex.test(user);
+}
 
   // Método login con validaciones
   async login() {
-    if (!this.email) {
-      this.mostrarError('Ingrese un e-mail.');
+    if (!this.user) {
+      this.mostrarError('Ingrese un usuario.');
       return;
     }
 
-    if (this.email.length < 3 || this.email.length > 8) {
-      this.mostrarError('El email debe tener entre 3 y 8 caracteres.');
+    if (this.user.length < 3 || this.user.length > 8) {
+      this.mostrarError('El usuario debe tener entre 3 y 8 caracteres.');
       return;
     }
 
-    if (!this.validarEmail(this.email)) {
-      this.mostrarError('El email ingresado no es válido.');
+    if (!this.validarUsuario(this.user)) {
+      this.mostrarError('El usuario ingresado no es válido. Debe ser alfanumérico.');
       return;
     }
 
@@ -82,6 +83,6 @@ export class LoginPage {
 
     // Si todo es correcto
     await this.mostrarToasts();
-    this.router.navigate(['/home'], { state: { user: this.email } });
+    this.router.navigate(['/home'], { state: { user: this.user } });
   }
 }
